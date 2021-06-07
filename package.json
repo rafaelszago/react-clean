@@ -2,10 +2,13 @@
   "name": "react-clean",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Rafael Zago <rafael.zago@br-mediagroup.com>",
+  "author": "Rafael Zago <rafaelszago@gmail.com>",
   "repository": "git@github.com:rafaelszago/react-clean.git",
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --passWithNoTests",
+    "test:watch": "yarn test -- --watch",
+    "test:staged": "yarn test -- --findRelatedTests",
+    "test:ci": "yarn test -- --coverage"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
