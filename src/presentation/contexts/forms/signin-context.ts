@@ -1,3 +1,9 @@
 import { createContext } from 'react'
 
-export const SigninContext = createContext(null)
+export type SigninContextParams = {
+  isLoading: boolean
+  errorMessage?: string
+  successMessage?: string
+}
+
+export const SigninContext = createContext<SigninContextParams>(null)

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Form, Button, Input, Typography, Space } from 'antd'
 import { SigninAlert } from '@/presentation/components/alerts'
-import { SigninContext } from '@/presentation/contexts'
+import { SigninContext, SigninContextParams } from '@/presentation/contexts'
 
 const { Link } = Typography
 
 const SigninForm: React.FC = () => {
-  const [state] = useState({
+  const [state] = useState<SigninContextParams>({
     isLoading: false,
     errorMessage: '',
     successMessage: '',
