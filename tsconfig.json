@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "preserve",
     "rootDir": "src",
     "baseUrl": "src",
     "paths": {
