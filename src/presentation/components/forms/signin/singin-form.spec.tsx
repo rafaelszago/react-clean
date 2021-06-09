@@ -2,18 +2,7 @@ import React from 'react'
 import { render, RenderResult, fireEvent } from '@testing-library/react'
 import SigninForm from './signin-form'
 import { Validation } from '@/presentation/protocols/validations'
-
-class ValidationSpy implements Validation {
-  errorMessage: string
-  fieldName: string
-  fieldValue: string
-
-  validate(fieldName: string, fieldValue: string): string {
-    this.fieldName = fieldName
-    this.fieldValue = fieldValue
-    return this.errorMessage
-  }
-}
+import { ValidationSpy } from '@/presentation/tests'
 
 type SutTypes = {
   sut: RenderResult
