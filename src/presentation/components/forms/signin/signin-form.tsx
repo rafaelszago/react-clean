@@ -1,16 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Button, Input, Typography, Space } from 'antd'
 import { SigninAlert } from '@/presentation/components/alerts'
-import { SigninContext, SigninContextParams } from '@/presentation/contexts'
+import {
+  FormContext,
+  FormContextParams,
+  SigninContextParams,
+  SigninContext,
+} from '@/presentation/contexts'
+import { Validation } from '@/presentation/protocols/validations'
 
-const { Link } = Typography
+const { Link, Paragraph } = Typography
 
-const SigninForm: React.FC = () => {
-  const [state] = useState<SigninContextParams>({
-    isLoading: false,
-    errorMessage: '',
-    successMessage: '',
+type Props = {
+  validation: Validation
+}
+
+const SigninForm: React.FC<Props> = ({ validation }: Props) => {
+  const [formState] = useState<FormContextParams>({
+    isLoading: true,
   })
+  const [state, setState] = useState<SigninContextParams>({
+    email: '',
+    password: '',
+  })
+
+  const handleChange = (event: React.FocusEvent<HTMLInputElement>): void => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.value,
+    })
+  }
+
+  useEffect(() => {
+    validation.validate('email', state.email)
+  }, [state.email])
+
+  useEffect(() => {
+    validation.validate('password', state.password)
+  }, [state.password])
 
   return (
     <SigninContext.Provider value={state}>
@@ -26,7 +53,13 @@ const SigninForm: React.FC = () => {
             },
           ]}
         >
-          <Input placeholder="you@email.com" type="email" />
+          <Input
+            placeholder="you@email.com"
+            name="email"
+            type="email"
+            data-testid="email"
+            onChange={handleChange}
+          />
         </Form.Item>
         <Form.Item
           label="Password"
@@ -38,11 +71,15 @@ const SigninForm: React.FC = () => {
             },
           ]}
         >
-          <Input.Password />
+          <Input.Password
+            name="password"
+            onChange={handleChange}
+            data-testid="password"
+          />
         </Form.Item>
         <Form.Item>
           <Space size="large">
-            <Button type="primary" loading={state.isLoading}>
+            <Button type="primary" loading={formState.isLoading}>
               Sign in
             </Button>
             <Link>Forgot password?</Link>
