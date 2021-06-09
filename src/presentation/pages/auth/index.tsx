@@ -1,9 +1,9 @@
 import React from 'react'
 import { Typography, Layout, Row, Col, Tabs, Skeleton } from 'antd'
 import { SigninForm } from '@/presentation/components'
-import { ValidationSpy } from '@/presentation/tests'
+import { ValidationStub } from '@/presentation/tests'
 
-const validationSpy = new ValidationSpy()
+const validationStub = new ValidationStub()
 
 const { Content } = Layout
 const { TabPane } = Tabs
@@ -19,7 +19,7 @@ const Auth: React.FC = () => {
             <Title>Welcome to Awesome Application</Title>
             <Tabs>
               <TabPane tab="Sign In" key="signin" id="signin">
-                <SigninForm validation={validationSpy} />
+                <SigninForm validation={validationStub} />
               </TabPane>
               <TabPane tab="Create new account" key="signup"></TabPane>
             </Tabs>

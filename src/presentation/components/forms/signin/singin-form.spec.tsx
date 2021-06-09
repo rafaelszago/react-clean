@@ -2,20 +2,20 @@ import React from 'react'
 import { render, RenderResult, fireEvent } from '@testing-library/react'
 import faker from 'faker'
 import SigninForm from './signin-form'
-import { ValidationSpy } from '@/presentation/tests'
+import { ValidationStub } from '@/presentation/tests'
 
 type SutTypes = {
   sut: RenderResult
-  validationSpy: ValidationSpy
+  validationStub: ValidationStub
 }
 
 const makeSut = (): SutTypes => {
-  const validationSpy = new ValidationSpy()
-  const sut = render(<SigninForm validation={validationSpy} />)
+  const validationStub = new ValidationStub()
+  const sut = render(<SigninForm validation={validationStub} />)
 
   return {
     sut,
-    validationSpy,
+    validationStub,
   }
 }
 
@@ -24,31 +24,7 @@ describe('Signin Component', () => {
     const { sut } = makeSut()
     const emailInput = sut.getByTestId('email')
     expect(emailInput).toBeTruthy()
-  })
-  test('Should call Validation with correct email', () => {
-    const { sut, validationSpy } = makeSut()
-    const email = faker.internet.email()
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: email } })
-    expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe(email)
-  })
-
-  test('Should call Validation with correct password', () => {
-    const { sut, validationSpy } = makeSut()
-    const password = faker.internet.password()
     const passwordInput = sut.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: password } })
-    expect(validationSpy.fieldName).toBe('password')
-    expect(validationSpy.fieldValue).toBe(password)
-  })
-
-  test('Should return an error if email Validation fails', () => {
-    const { sut, validationSpy } = makeSut()
-    const email = faker.internet.email()
-    const emailInput = sut.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: email } })
-    expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe(email)
+    expect(passwordInput).toBeTruthy()
   })
 })

@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Input, Typography, Space } from 'antd'
 import {
-  FormContext,
   FormContextParams,
   SigninContextParams,
   SigninContext,
 } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
 
-const { Link, Paragraph } = Typography
+const { Link } = Typography
 
 type Props = {
   validation: Validation
 }
 
 const SigninForm: React.FC<Props> = ({ validation }: Props) => {
-  const [formState] = useState<FormContextParams>({
-    isLoading: false,
-  })
   const [state, setState] = useState<SigninContextParams>({
     email: '',
     password: '',
@@ -31,12 +27,12 @@ const SigninForm: React.FC<Props> = ({ validation }: Props) => {
   }
 
   useEffect(() => {
-    validation.validate('email', state.email)
-  }, [state.email])
-
-  useEffect(() => {
-    validation.validate('password', state.password)
-  }, [state.password])
+    setState({
+      ...state,
+      emailError: validation.validate('email', state.email),
+      passwordError: validation.validate('password', state.password),
+    })
+  }, [state.email, state.password])
 
   return (
     <SigninContext.Provider value={state}>
@@ -44,12 +40,7 @@ const SigninForm: React.FC<Props> = ({ validation }: Props) => {
         <Form.Item
           label="E-mail"
           name="email"
-          rules={[
-            {
-              required: true,
-              message: 'Please insert your e-mail',
-            },
-          ]}
+          rules={[{ required: true }, { type: 'email' }]}
         >
           <Input
             placeholder="you@email.com"
@@ -65,7 +56,7 @@ const SigninForm: React.FC<Props> = ({ validation }: Props) => {
           rules={[
             {
               required: true,
-              message: 'Please insert your password!',
+              message: state.passwordError,
             },
           ]}
         >
@@ -77,7 +68,10 @@ const SigninForm: React.FC<Props> = ({ validation }: Props) => {
         </Form.Item>
         <Form.Item>
           <Space size="large">
-            <Button type="primary" loading={formState.isLoading}>
+            <Button
+              type="primary"
+              disabled={!!state.emailError || !!state.passwordError}
+            >
               Sign in
             </Button>
             <Link>Forgot password?</Link>
