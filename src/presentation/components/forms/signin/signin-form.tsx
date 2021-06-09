@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Input, Typography, Space } from 'antd'
-import { SigninAlert } from '@/presentation/components/alerts'
 import {
   FormContext,
   FormContextParams,
@@ -17,7 +16,7 @@ type Props = {
 
 const SigninForm: React.FC<Props> = ({ validation }: Props) => {
   const [formState] = useState<FormContextParams>({
-    isLoading: true,
+    isLoading: false,
   })
   const [state, setState] = useState<SigninContextParams>({
     email: '',
@@ -41,7 +40,6 @@ const SigninForm: React.FC<Props> = ({ validation }: Props) => {
 
   return (
     <SigninContext.Provider value={state}>
-      <SigninAlert />
       <Form name="signin" layout="vertical">
         <Form.Item
           label="E-mail"
