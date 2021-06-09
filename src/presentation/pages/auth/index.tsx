@@ -9,7 +9,7 @@ const { Content } = Layout
 const { TabPane } = Tabs
 const { Title } = Typography
 
-const Login: React.FC = () => {
+const Auth: React.FC = () => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Content>
@@ -34,4 +34,4 @@ const Login: React.FC = () => {
   )
 }
 
-export default Login
+export default Auth

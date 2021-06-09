@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
-import Auth from '@/presentation/pages/auth/index'
+import Router from './routes/router'
 
 import 'antd/dist/antd.css'
 
-ReactDOM.render(<Auth />, document.getElementById('main'))
+ReactDOM.render(<Router />, document.getElementById('main'))
