@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "jsx": "preserve",
+    "jsx": "react",
     "rootDir": "src",
     "baseUrl": "src",
     "paths": {
@@ -14,10 +14,11 @@
     "allowJs": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "isolatedModules": true
   },
-  "include": ["src"],
+  "include": ["src", "src/pages/_config/jest.setup.js"],
   "exclude": ["src/main/test/cypress"]
 }

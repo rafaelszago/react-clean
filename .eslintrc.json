@@ -4,13 +4,10 @@
       "version": "detect"
     }
   },
-  "extends": [
-    "standard-with-typescript",
-    "plugin:react/recommended",
-    "plugin:cypress/recommended"
-  ],
+  "extends": ["standard-with-typescript", "plugin:react/recommended"],
   "env": {
-    "cypress/globals": true
+    "cypress/globals": true,
+    "jest": true
   },
   "plugins": ["react", "cypress", "@typescript-eslint", "prettier"],
   "parserOptions": {
