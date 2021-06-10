@@ -1,5 +1,5 @@
 import faker from 'faker'
-import { EmailError } from '@/validation/errors/email-error'
+import { EmailError } from '@/validation/errors'
 import { EmailValidation } from './email-validation'
 
 const makeSut = (): EmailValidation =>
