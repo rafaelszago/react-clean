@@ -11,4 +11,10 @@ describe('MinLengthValidation', () => {
     const error = sut.validate(faker.random.alphaNumeric(6))
     expect(error).toEqual(new MinLengthError(sut.name, sut.minLength))
   })
+
+  test('Should return falsy if field is valid', () => {
+    const sut = makeSut()
+    const error = sut.validate(faker.random.alphaNumeric(15))
+    expect(error).toBeFalsy()
+  })
 })
