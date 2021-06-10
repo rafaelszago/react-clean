@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography, Layout, Row, Col, Tabs, Skeleton } from 'antd'
-import { SigninForm } from '@/presentation/components'
+import Signin from './signin/signin'
 import { ValidationStub } from '@/presentation/tests'
 
 const validationStub = new ValidationStub()
@@ -19,7 +19,7 @@ const Auth: React.FC = () => {
             <Title>Welcome to Awesome Application</Title>
             <Tabs>
               <TabPane tab="Sign In" key="signin" id="signin">
-                <SigninForm validation={validationStub} />
+                <Signin validation={validationStub} />
               </TabPane>
               <TabPane tab="Create new account" key="signup"></TabPane>
             </Tabs>
