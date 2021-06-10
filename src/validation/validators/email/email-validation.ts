@@ -2,7 +2,9 @@ import { EmailError } from '@/validation/errors/email-error'
 import { FieldValidation } from '@/validation/protocols/field-validation'
 
 export class EmailValidation implements FieldValidation {
-  constructor(readonly name: string) {}
+  constructor(readonly name: string) {
+    this.name = name
+  }
 
   validate(value: string): Error {
     const regex =
