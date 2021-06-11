@@ -1,6 +1,6 @@
 import faker from 'faker'
 import { ValidationComposite } from './validation-composite'
-import { FieldValidationSpy } from '../tests/mock-field-validation'
+import { FieldValidationSpy } from '../../tests/mock-field-validation'
 
 describe('ValidationComposite', () => {
   test('Should return error if any validation fails', () => {
