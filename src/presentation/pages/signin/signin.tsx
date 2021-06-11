@@ -16,7 +16,7 @@ import { Validation } from '@/presentation/protocols/validations'
 import { Authentication } from '@/domain/usecases'
 import SigninAlert from './components/signin-alert'
 
-const { Link, Paragraph, Title } = Typography
+const { Link, Title } = Typography
 const { TabPane } = Tabs
 const { Content } = Layout
 
@@ -27,16 +27,10 @@ type Props = {
 
 const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
   const [state, setState] = useState<SigninContextParams>({
+    isLoading: false,
     email: '',
     password: '',
   })
-
-  const handleFormChange = changedValues => {
-    setState({
-      ...state,
-      ...changedValues,
-    })
-  }
 
   useEffect(() => {
     setState({
@@ -45,6 +39,22 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
       passwordError: validation.validate('password', state.password),
     })
   }, [state.email, state.password])
+
+  const handleFormChange = changedValues => {
+    setState({
+      ...state,
+      ...changedValues,
+    })
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+
+    setState({
+      ...state,
+      isLoading: true,
+    })
+  }
 
   return (
     <SigninContext.Provider value={state}>
@@ -55,13 +65,13 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
             <Col span={8} style={{ padding: '64px' }}>
               <Skeleton.Image style={{ marginBottom: '64px' }} />
               <Title>Welcome to Awesome Application</Title>
-              <Paragraph>{state.emailError}</Paragraph>
               <Tabs>
                 <TabPane tab="Sign In" key="signin" id="signin">
                   <Form
                     name="signin"
                     layout="vertical"
                     onValuesChange={handleFormChange}
+                    onSubmitCapture={handleSubmit}
                   >
                     <Form.Item
                       label="E-mail"
@@ -93,8 +103,10 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
                       <Space size="large">
                         <Button
                           type="primary"
+                          loading={state.isLoading}
                           disabled={!!state.emailError || !!state.passwordError}
                           htmlType="submit"
+                          data-testid="submit"
                         >
                           Sign in
                         </Button>
