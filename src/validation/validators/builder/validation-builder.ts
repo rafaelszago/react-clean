@@ -21,12 +21,12 @@ export class ValidationBuilder {
     return this
   }
 
-  maxLegnth(length: number): ValidationBuilder {
+  max(length: number): ValidationBuilder {
     this.validations.push(new MaxLengthValidation(this.fieldName, length))
     return this
   }
 
-  minLegnth(length: number): ValidationBuilder {
+  min(length: number): ValidationBuilder {
     this.validations.push(new MinLengthValidation(this.fieldName, length))
     return this
   }
