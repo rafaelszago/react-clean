@@ -8,13 +8,13 @@ const SigninAlert: React.FC = () => {
 
   useEffect(() => {
     if (emailError) {
-      message.error(passwordError)
+      message.error(emailError)
     }
   }, [emailError])
 
   useEffect(() => {
     if (passwordError) {
-      message.success(passwordError)
+      message.error(passwordError)
     }
   }, [passwordError])
 
