@@ -1,6 +1,10 @@
 import faker from 'faker'
-import { RequiredFieldValidation, EmailValidation } from '../'
-import { MinLengthValidation } from '../min-length/min-length-validation'
+import {
+  RequiredFieldValidation,
+  EmailValidation,
+  MinLengthValidation,
+  MaxLengthValidation,
+} from '../'
 import { ValidationBuilder as sut } from './validation-builder'
 
 describe('ValidationBuilder', () => {
@@ -14,12 +18,20 @@ describe('ValidationBuilder', () => {
     const validations = sut.field(fieldName).email().build()
     expect(validations).toEqual([new EmailValidation(fieldName)])
   })
-  test('Should return EmailValidation', () => {
+  test('Should return MinLengthValidation', () => {
     const fieldName = faker.database.column()
     const fieldValue = 5
     const validations = sut.field(fieldName).min(fieldValue).build()
     expect(validations).toEqual([
       new MinLengthValidation(fieldName, fieldValue),
+    ])
+  })
+  test('Should return MaxLengthValidation', () => {
+    const fieldName = faker.database.column()
+    const fieldValue = 5
+    const validations = sut.field(fieldName).max(fieldValue).build()
+    expect(validations).toEqual([
+      new MaxLengthValidation(fieldName, fieldValue),
     ])
   })
 })
