@@ -34,4 +34,21 @@ describe('ValidationBuilder', () => {
       new MaxLengthValidation(fieldName, fieldValue),
     ])
   })
+  test('Should return validations', () => {
+    const fieldName = faker.database.column()
+    const fieldValue = 5
+    const validations = sut
+      .field(fieldName)
+      .required()
+      .email()
+      .min(fieldValue)
+      .max(fieldValue)
+      .build()
+    expect(validations).toEqual([
+      new RequiredFieldValidation(fieldName),
+      new EmailValidation(fieldName),
+      new MinLengthValidation(fieldName, fieldValue),
+      new MaxLengthValidation(fieldName, fieldValue),
+    ])
+  })
 })
