@@ -9,7 +9,7 @@ describe('ValidationComposite', () => {
     const fieldValidationSpy2 = new FieldValidationSpy(fieldName)
     const errorMessage = faker.hacker.phrase()
     fieldValidationSpy2.error = new Error(errorMessage)
-    const sut = new ValidationComposite([
+    const sut = ValidationComposite.build([
       fieldValidationSpy,
       fieldValidationSpy2,
     ])

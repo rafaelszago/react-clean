@@ -34,7 +34,7 @@ describe('ValidationBuilder', () => {
       new MaxLengthValidation(fieldName, fieldValue),
     ])
   })
-  test('Should return validations', () => {
+  test('Should return a list of validations', () => {
     const fieldName = faker.database.column()
     const fieldValue = 5
     const validations = sut
