@@ -47,13 +47,27 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
     })
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault()
+    try {
+      setState({
+        ...state,
+        isLoading: true,
+      })
 
-    setState({
-      ...state,
-      isLoading: true,
-    })
+      await authentication.auth({
+        email: state.email,
+        password: state.password,
+      })
+    } catch (error) {
+      setState({
+        ...state,
+        isLoading: false,
+        formError: error.message,
+      })
+    }
   }
 
   return (

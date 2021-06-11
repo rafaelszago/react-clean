@@ -3,20 +3,13 @@ import { message } from 'antd'
 import { SigninContext, SigninContextParams } from '@/presentation/contexts'
 
 const SigninAlert: React.FC = () => {
-  const { emailError, passwordError } =
-    useContext<SigninContextParams>(SigninContext)
+  const { httpError } = useContext<SigninContextParams>(SigninContext)
 
   useEffect(() => {
-    if (emailError) {
-      message.error(emailError)
+    if (httpError) {
+      message.error(httpError)
     }
-  }, [emailError])
-
-  useEffect(() => {
-    if (passwordError) {
-      message.error(passwordError)
-    }
-  }, [passwordError])
+  }, [httpError])
 
   return <></>
 }

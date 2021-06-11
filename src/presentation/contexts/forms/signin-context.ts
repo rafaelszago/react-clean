@@ -6,6 +6,7 @@ export type SigninContextParams = {
   isLoading?: boolean
   emailError?: string
   passwordError?: string
+  formError?: string
 }
 
 export const SigninContext = createContext<SigninContextParams>(null)
