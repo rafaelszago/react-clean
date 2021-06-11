@@ -38,10 +38,6 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
     })
   }
 
-  const handleInput = () => {
-    console.log('input changed')
-  }
-
   useEffect(() => {
     setState({
       ...state,
@@ -80,10 +76,17 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
                         placeholder="you@email.com"
                         type="email"
                         data-testid="email"
-                        onChange={handleInput}
                       />
                     </Form.Item>
-                    <Form.Item label="Password" name="password">
+                    <Form.Item
+                      label="Password"
+                      name="password"
+                      hasFeedback={!!state.passwordError}
+                      validateStatus={
+                        !!state.passwordError ? 'error' : 'validating'
+                      }
+                      help={state.passwordError}
+                    >
                       <Input.Password data-testid="password" />
                     </Form.Item>
                     <Form.Item>
