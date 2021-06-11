@@ -3,13 +3,13 @@ import { message } from 'antd'
 import { SigninContext, SigninContextParams } from '@/presentation/contexts'
 
 const SigninAlert: React.FC = () => {
-  const { httpError } = useContext<SigninContextParams>(SigninContext)
+  const { formError } = useContext<SigninContextParams>(SigninContext)
 
   useEffect(() => {
-    if (httpError) {
-      message.error(httpError)
+    if (formError) {
+      message.error(formError)
     }
-  }, [httpError])
+  }, [formError])
 
   return <></>
 }
