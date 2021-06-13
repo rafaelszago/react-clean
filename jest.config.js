@@ -8,13 +8,13 @@ module.exports = {
   ],
   coverageDirectory: 'coverage',
   testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
+    '<rootDir>/node_modules/'
   ],
   testEnvironment: 'jsdom',
   transform: {
     '.+\\.(ts|tsx)$': 'ts-jest'
   },
-  setupFilesAfterEnv: ["./src/main/config/jest.setup.js"],
+  setupFilesAfterEnv: ['./src/main/config/jest.setup.js'],
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1',
     '\\.scss$': 'identity-obj-proxy'

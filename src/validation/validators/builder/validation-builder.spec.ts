@@ -3,7 +3,7 @@ import {
   RequiredFieldValidation,
   EmailValidation,
   MinLengthValidation,
-  MaxLengthValidation,
+  MaxLengthValidation
 } from '../'
 import { ValidationBuilder as sut } from './validation-builder'
 
@@ -23,7 +23,7 @@ describe('ValidationBuilder', () => {
     const fieldValue = 5
     const validations = sut.field(fieldName).min(fieldValue).build()
     expect(validations).toEqual([
-      new MinLengthValidation(fieldName, fieldValue),
+      new MinLengthValidation(fieldName, fieldValue)
     ])
   })
   test('Should return MaxLengthValidation', () => {
@@ -31,7 +31,7 @@ describe('ValidationBuilder', () => {
     const fieldValue = 5
     const validations = sut.field(fieldName).max(fieldValue).build()
     expect(validations).toEqual([
-      new MaxLengthValidation(fieldName, fieldValue),
+      new MaxLengthValidation(fieldName, fieldValue)
     ])
   })
   test('Should return a list of validations', () => {
@@ -48,7 +48,7 @@ describe('ValidationBuilder', () => {
       new RequiredFieldValidation(fieldName),
       new EmailValidation(fieldName),
       new MinLengthValidation(fieldName, fieldValue),
-      new MaxLengthValidation(fieldName, fieldValue),
+      new MaxLengthValidation(fieldName, fieldValue)
     ])
   })
 })

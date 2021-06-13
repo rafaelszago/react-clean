@@ -9,7 +9,7 @@ import {
   Skeleton,
   Layout,
   Row,
-  Col,
+  Col
 } from 'antd'
 import { SigninContextParams, SigninContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
@@ -29,43 +29,43 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
   const [state, setState] = useState<SigninContextParams>({
     isLoading: false,
     email: '',
-    password: '',
+    password: ''
   })
 
   useEffect(() => {
     setState({
       ...state,
       emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password),
+      passwordError: validation.validate('password', state.password)
     })
   }, [state.email, state.password])
 
-  const handleFormChange = changedValues => {
+  const handleFormChange = (changedValues): any => {
     setState({
       ...state,
-      ...changedValues,
+      ...changedValues
     })
   }
 
   const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
+    event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault()
     try {
       setState({
         ...state,
-        isLoading: true,
+        isLoading: true
       })
 
       await authentication.auth({
         email: state.email,
-        password: state.password,
+        password: state.password
       })
     } catch (error) {
       setState({
         ...state,
         isLoading: false,
-        formError: error.message,
+        formError: error.message
       })
     }
   }
@@ -91,9 +91,7 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
                       label="E-mail"
                       name="email"
                       hasFeedback={!!state.emailError}
-                      validateStatus={
-                        !!state.emailError ? 'error' : 'validating'
-                      }
+                      validateStatus={state.emailError ? 'error' : 'validating'}
                       help={state.emailError}
                     >
                       <Input
@@ -107,7 +105,7 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
                       name="password"
                       hasFeedback={!!state.passwordError}
                       validateStatus={
-                        !!state.passwordError ? 'error' : 'validating'
+                        state.passwordError ? 'error' : 'validating'
                       }
                       help={state.passwordError}
                     >

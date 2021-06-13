@@ -4,9 +4,9 @@ import { AuthenticationParams } from '../usecases'
 
 export const mockAuthentication = (): AuthenticationParams => ({
   email: faker.internet.email(),
-  password: faker.internet.password(),
+  password: faker.internet.password()
 })
 
 export const mockAccountModel = (): AccountModel => ({
-  accessToken: faker.random.alphaNumeric(32),
+  accessToken: faker.random.alphaNumeric(32)
 })

@@ -3,7 +3,7 @@ import {
   fireEvent,
   render,
   RenderResult,
-  waitFor,
+  waitFor
 } from '@testing-library/react'
 import faker from 'faker'
 import Signin from './signin'
@@ -19,13 +19,13 @@ const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   const sut = render(
-    <Signin validation={validationStub} authentication={authenticationSpy} />,
+    <Signin validation={validationStub} authentication={authenticationSpy} />
   )
 
   return {
     sut,
     validationStub,
-    authenticationSpy,
+    authenticationSpy
   }
 }
 
@@ -47,7 +47,7 @@ describe('Signin Component', () => {
 
     fireEvent.input(emailInput, { target: { value: faker.random.word() } })
     fireEvent.input(passwordInput, {
-      target: { value: faker.internet.password() },
+      target: { value: faker.internet.password() }
     })
 
     await waitFor(() => {
@@ -63,7 +63,7 @@ describe('Signin Component', () => {
 
     fireEvent.input(emailInput, { target: { value: faker.internet.email() } })
     fireEvent.input(passwordInput, {
-      target: { value: faker.internet.password() },
+      target: { value: faker.internet.password() }
     })
     fireEvent.click(submitButton)
 
@@ -82,14 +82,14 @@ describe('Signin Component', () => {
 
     fireEvent.input(emailInput, { target: { value: email } })
     fireEvent.input(passwordInput, {
-      target: { value: password },
+      target: { value: password }
     })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
       expect(authenticationSpy.params).toEqual({
         email,
-        password,
+        password
       })
     })
   })

@@ -6,10 +6,9 @@
   },
   "extends": ["standard-with-typescript", "plugin:react/recommended"],
   "env": {
-    "cypress/globals": true,
     "jest": true
   },
-  "plugins": ["react", "cypress", "@typescript-eslint", "prettier"],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "parserOptions": {
     "project": "./tsconfig-eslint.json"
   },
@@ -20,6 +19,8 @@
     "@typescript-eslint/comma-spacing": "off",
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/no-namespace": "off",
+    "space-before-function-paren": 0,
+    "@typescript-eslint/space-before-function-paren": 0,
     "no-redeclare": "off",
     "import/export": "off",
     "react/jsx-uses-react": "error",

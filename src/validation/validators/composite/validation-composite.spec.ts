@@ -11,7 +11,7 @@ describe('ValidationComposite', () => {
     fieldValidationSpy2.error = new Error(errorMessage)
     const sut = ValidationComposite.build([
       fieldValidationSpy,
-      fieldValidationSpy2,
+      fieldValidationSpy2
     ])
     const error = sut.validate(fieldName, faker.random.word())
     expect(error).toBe(errorMessage)

@@ -1,5 +1,5 @@
 export class UnexpectedError extends Error {
-  constructor() {
+  constructor () {
     super('Connection error')
     this.name = 'UnexpectedError'
   }

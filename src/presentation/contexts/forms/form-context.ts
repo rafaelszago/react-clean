@@ -9,5 +9,5 @@ export type FormContextParams = {
 export const FormContext = createContext<FormContextParams>({
   isLoading: false,
   errorMessage: '',
-  successMessage: '',
+  successMessage: ''
 })
