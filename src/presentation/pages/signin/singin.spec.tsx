@@ -8,24 +8,33 @@ import {
 import faker from 'faker'
 import Signin from './signin'
 import { AuthenticationSpy, ValidationStub } from '@/presentation/tests'
+import { SaveAccessTokenMock } from '@/presentation/tests/mock-save-access-token'
 
 type SutTypes = {
   sut: RenderResult
   validationStub: ValidationStub
   authenticationSpy: AuthenticationSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 const makeSut = (): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
+  const saveAccessTokenMock = new SaveAccessTokenMock()
+
   const sut = render(
-    <Signin validation={validationStub} authentication={authenticationSpy} />
+    <Signin
+      validation={validationStub}
+      authentication={authenticationSpy}
+      saveAccessToken={saveAccessTokenMock}
+    />
   )
 
   return {
     sut,
     validationStub,
-    authenticationSpy
+    authenticationSpy,
+    saveAccessTokenMock
   }
 }
 
@@ -91,6 +100,26 @@ describe('Signin Component', () => {
         email,
         password
       })
+    })
+  })
+
+  test('Should call SaveAccessToken on success', async () => {
+    const { sut, authenticationSpy, saveAccessTokenMock } = makeSut()
+
+    const emailInput = sut.getByTestId('email')
+    const passwordInput = sut.getByTestId('password')
+    const submitButton = sut.getByTestId('submit') as HTMLButtonElement
+    const email = faker.internet.email()
+    const password = faker.internet.password()
+
+    fireEvent.input(emailInput, { target: { value: email } })
+    fireEvent.input(passwordInput, { target: { value: password } })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(saveAccessTokenMock.accessToken).toBe(
+        authenticationSpy.account.accessToken
+      )
     })
   })
 })
