@@ -13,7 +13,7 @@ import {
 } from 'antd'
 import { SigninContextParams, SigninContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
-import { Authentication } from '@/domain/usecases'
+import { Authentication, SaveAccessToken } from '@/domain/usecases'
 import SigninAlert from './components/signin-alert'
 
 const { Link, Title } = Typography
@@ -23,9 +23,14 @@ const { Content } = Layout
 type Props = {
   authentication?: Authentication
   validation: Validation
+  saveAccessToken: SaveAccessToken
 }
 
-const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
+const Signin: React.FC<Props> = ({
+  authentication,
+  validation,
+  saveAccessToken
+}: Props) => {
   const [state, setState] = useState<SigninContextParams>({
     isLoading: false,
     email: '',
@@ -57,10 +62,12 @@ const Signin: React.FC<Props> = ({ authentication, validation }: Props) => {
         isLoading: true
       })
 
-      await authentication.auth({
+      const account = await authentication.auth({
         email: state.email,
         password: state.password
       })
+
+      await saveAccessToken.save(account.accessToken)
     } catch (error) {
       setState({
         ...state,
