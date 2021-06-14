@@ -10,7 +10,7 @@ module.exports = {
     publicPath: '/'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', 'scss'],
+    extensions: ['.ts', '.tsx', '.js', '.scss', '.less'],
     alias: {
       '@': path.join(__dirname, 'src')
     }
