@@ -19,4 +19,5 @@ Simple React + Typescript project with Clean Architecture
 - Husky
 - Eslint
 - Prettier
+- Yarn
 - Ant.design
