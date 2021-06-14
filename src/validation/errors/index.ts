@@ -1,3 +1,4 @@
+export * from './compare-fields-error'
 export * from './email-error'
 export * from './max-length-error'
 export * from './min-length-error'
