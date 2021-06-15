@@ -79,7 +79,8 @@ const SignUp: React.FC<Props> = ({
     try {
       setFormState({
         ...formState,
-        isLoading: true
+        isLoading: true,
+        errorMessage: ''
       })
 
       const account = await addAccount.add({
@@ -95,8 +96,7 @@ const SignUp: React.FC<Props> = ({
         setFormState({
           ...formState,
           isLoading: false,
-          success: true,
-          errorMessage: ''
+          success: true
         })
 
         history.push('/app')
@@ -192,7 +192,7 @@ const SignUp: React.FC<Props> = ({
                         }
                         help={state.passwordConfirmationError}
                       >
-                        <Input.Password data-testid="passwordConfirmation" />
+                        <Input.Password data-testid="password-confirmation" />
                       </Form.Item>
                       <Form.Item>
                         <Space size="large">

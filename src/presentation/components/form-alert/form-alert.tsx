@@ -8,7 +8,7 @@ const FormAlert: React.FC = () => {
 
   useEffect(() => {
     if (success) {
-      message.success('Form submitted successfully!')
+      message.success('Submitted successfully!')
     }
     if (isLoading) {
       const loading = message.loading('Submitting form...', 500)
