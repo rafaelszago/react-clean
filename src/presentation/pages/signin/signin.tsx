@@ -11,10 +11,15 @@ import {
   Row,
   Col
 } from 'antd'
-import { SignInContextParams, SignInContext } from '@/presentation/contexts'
+import {
+  SignInContextParams,
+  SignInContext,
+  FormContext,
+  FormContextParams
+} from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
 import { Authentication, SaveAccessToken } from '@/domain/usecases'
-import SignInAlert from './components/signin-alert'
+import { FormAlert } from '@/presentation/components'
 import { useHistory } from 'react-router-dom'
 
 const { Link, Title } = Typography
@@ -35,9 +40,13 @@ const SignIn: React.FC<Props> = ({
   const history = useHistory()
 
   const [state, setState] = useState<SignInContextParams>({
-    isLoading: false,
     email: '',
     password: ''
+  })
+
+  const [formState, setFormState] = useState<FormContextParams>({
+    isLoading: false,
+    success: false
   })
 
   useEffect(() => {
@@ -60,8 +69,8 @@ const SignIn: React.FC<Props> = ({
   ): Promise<void> => {
     event.preventDefault()
     try {
-      setState({
-        ...state,
+      setFormState({
+        ...formState,
         isLoading: true
       })
 
@@ -70,12 +79,20 @@ const SignIn: React.FC<Props> = ({
         password: state.password
       })
 
-      await saveAccessToken.save(account.accessToken)
+      if (account.accessToken) {
+        await saveAccessToken.save(account.accessToken)
+
+        setFormState({
+          ...formState,
+          isLoading: false,
+          success: true
+        })
+      }
     } catch (error) {
-      setState({
-        ...state,
+      setFormState({
+        ...formState,
         isLoading: false,
-        formError: error.message
+        errorMessage: error.message
       })
     }
   }
@@ -85,73 +102,81 @@ const SignIn: React.FC<Props> = ({
   }
 
   return (
-    <SignInContext.Provider value={state}>
-      <Layout style={{ minHeight: '100vh' }}>
-        <SignInAlert />
-        <Content>
-          <Row>
-            <Col span={8} style={{ padding: '64px' }}>
-              <Skeleton.Image style={{ marginBottom: '64px' }} />
-              <Title>Welcome to Awesome Application</Title>
-              <Tabs onChange={handleTabs} activeKey="signin">
-                <TabPane tab="Sign In" key="signin" id="signin">
-                  <Form
-                    name="signin"
-                    layout="vertical"
-                    onValuesChange={handleFormChange}
-                    onSubmitCapture={handleSubmit}
-                  >
-                    <Form.Item
-                      label="E-mail"
-                      name="email"
-                      hasFeedback={!!state.emailError}
-                      validateStatus={state.emailError ? 'error' : 'validating'}
-                      help={state.emailError}
+    <>
+      <FormContext.Provider value={formState}>
+        <FormAlert />
+      </FormContext.Provider>
+      <SignInContext.Provider value={state}>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Content>
+            <Row>
+              <Col span={8} style={{ padding: '64px' }}>
+                <Skeleton.Image style={{ marginBottom: '64px' }} />
+                <Title>Welcome to Awesome Application</Title>
+                <Tabs onChange={handleTabs} activeKey="signin">
+                  <TabPane tab="Sign In" key="signin" id="signin">
+                    <Form
+                      name="signin"
+                      layout="vertical"
+                      onValuesChange={handleFormChange}
+                      onSubmitCapture={handleSubmit}
                     >
-                      <Input
-                        placeholder="you@email.com"
-                        type="email"
-                        data-testid="email"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      label="Password"
-                      name="password"
-                      hasFeedback={!!state.passwordError}
-                      validateStatus={
-                        state.passwordError ? 'error' : 'validating'
-                      }
-                      help={state.passwordError}
-                    >
-                      <Input.Password data-testid="password" />
-                    </Form.Item>
-                    <Form.Item>
-                      <Space size="large">
-                        <Button
-                          type="primary"
-                          loading={state.isLoading}
-                          disabled={!!state.emailError || !!state.passwordError}
-                          htmlType="submit"
-                          data-testid="submit"
-                        >
-                          Sign in
-                        </Button>
-                        <Link>Forgot password?</Link>
-                      </Space>
-                    </Form.Item>
-                  </Form>
-                </TabPane>
-                <TabPane tab="Create new account" key="signup"></TabPane>
-              </Tabs>
-            </Col>
-            <Col
-              span={16}
-              style={{ backgroundColor: '#0092ff', minHeight: '100vh' }}
-            />
-          </Row>
-        </Content>
-      </Layout>
-    </SignInContext.Provider>
+                      <Form.Item
+                        label="E-mail"
+                        name="email"
+                        hasFeedback={!!state.emailError}
+                        validateStatus={
+                          state.emailError ? 'error' : 'validating'
+                        }
+                        help={state.emailError}
+                      >
+                        <Input
+                          placeholder="you@email.com"
+                          type="email"
+                          data-testid="email"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        label="Password"
+                        name="password"
+                        hasFeedback={!!state.passwordError}
+                        validateStatus={
+                          state.passwordError ? 'error' : 'validating'
+                        }
+                        help={state.passwordError}
+                      >
+                        <Input.Password data-testid="password" />
+                      </Form.Item>
+                      <Form.Item>
+                        <Space size="large">
+                          <Button
+                            type="primary"
+                            loading={formState.isLoading}
+                            disabled={
+                              !!state.emailError || !!state.passwordError
+                            }
+                            htmlType="submit"
+                            data-testid="submit"
+                          >
+                            Sign in
+                          </Button>
+                          <Link>Forgot password?</Link>
+                        </Space>
+                      </Form.Item>
+                    </Form>
+                  </TabPane>
+                  <TabPane tab="Create new account" key="signup"></TabPane>
+                </Tabs>
+              </Col>
+              <Col
+                span={16}
+                style={{ backgroundColor: '#0092ff', minHeight: '100vh' }}
+              />
+            </Row>
+          </Content>
+        </Layout>
+      </SignInContext.Provider>
+    </>
   )
 }
 

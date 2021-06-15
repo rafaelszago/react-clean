@@ -11,9 +11,15 @@ import {
   Row,
   Col
 } from 'antd'
-import { SignUpContextParams, SignUpContext } from '@/presentation/contexts'
+import {
+  SignUpContextParams,
+  SignUpContext,
+  FormContext,
+  FormContextParams
+} from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
-import { Authentication, SaveAccessToken } from '@/domain/usecases'
+import { AddAccount, SaveAccessToken } from '@/domain/usecases'
+import { FormAlert } from '@/presentation/components'
 import { useHistory } from 'react-router-dom'
 
 const { Link, Title } = Typography
@@ -21,24 +27,28 @@ const { TabPane } = Tabs
 const { Content } = Layout
 
 type Props = {
-  authentication?: Authentication
+  addAccount?: AddAccount
   validation: Validation
   saveAccessToken: SaveAccessToken
 }
 
 const SignUp: React.FC<Props> = ({
-  authentication,
+  addAccount,
   validation,
   saveAccessToken
 }: Props) => {
   const history = useHistory()
 
   const [state, setState] = useState<SignUpContextParams>({
-    isLoading: false,
     name: '',
     email: '',
     password: '',
     passwordConfirmation: ''
+  })
+
+  const [formState, setFormState] = useState<FormContextParams>({
+    isLoading: false,
+    success: false
   })
 
   useEffect(() => {
@@ -67,22 +77,32 @@ const SignUp: React.FC<Props> = ({
   ): Promise<void> => {
     event.preventDefault()
     try {
-      setState({
-        ...state,
+      setFormState({
+        ...formState,
         isLoading: true
       })
 
-      const account = await authentication.auth({
+      const account = await addAccount.add({
+        name: state.name,
         email: state.email,
-        password: state.password
+        password: state.password,
+        passwordConfirmation: state.passwordConfirmation
       })
 
-      await saveAccessToken.save(account.accessToken)
+      if (account.accessToken) {
+        await saveAccessToken.save(account.accessToken)
+
+        setFormState({
+          ...formState,
+          isLoading: false,
+          success: true
+        })
+      }
     } catch (error) {
-      setState({
-        ...state,
+      setFormState({
+        ...formState,
         isLoading: false,
-        formError: error.message
+        errorMessage: error.message
       })
     }
   }
@@ -92,92 +112,105 @@ const SignUp: React.FC<Props> = ({
   }
 
   return (
-    <SignUpContext.Provider value={state}>
-      <Layout style={{ minHeight: '100vh' }}>
-        <Content>
-          <Row>
-            <Col span={8} style={{ padding: '64px' }}>
-              <Skeleton.Image style={{ marginBottom: '64px' }} />
-              <Title>Welcome to Awesome Application</Title>
-              <Tabs onChange={handleTabs} activeKey="signup">
-                <TabPane tab="Sign In" key="signin" id="signin"></TabPane>
-                <TabPane tab="Create new account" key="signup" id="signup">
-                  <Form
-                    name="signup"
-                    layout="vertical"
-                    onValuesChange={handleFormChange}
-                    onSubmitCapture={handleSubmit}
-                  >
-                    <Form.Item
-                      label="Name"
-                      name="name"
-                      hasFeedback={!!state.nameError}
-                      validateStatus={state.nameError ? 'error' : 'validating'}
-                      help={state.nameError}
+    <>
+      <FormContext.Provider value={formState}>
+        <FormAlert />
+      </FormContext.Provider>
+      <SignUpContext.Provider value={state}>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Content>
+            <Row>
+              <Col span={8} style={{ padding: '64px' }}>
+                <Skeleton.Image style={{ marginBottom: '64px' }} />
+                <Title>Welcome to Awesome Application</Title>
+                <Tabs onChange={handleTabs} activeKey="signup">
+                  <TabPane tab="Sign In" key="signin" id="signin"></TabPane>
+                  <TabPane tab="Create new account" key="signup" id="signup">
+                    <Form
+                      name="signup"
+                      layout="vertical"
+                      onValuesChange={handleFormChange}
+                      onSubmitCapture={handleSubmit}
                     >
-                      <Input placeholder="Full Name" data-testid="name" />
-                    </Form.Item>
-                    <Form.Item
-                      label="E-mail"
-                      name="email"
-                      hasFeedback={!!state.emailError}
-                      validateStatus={state.emailError ? 'error' : 'validating'}
-                      help={state.emailError}
-                    >
-                      <Input
-                        placeholder="you@email.com"
-                        type="email"
-                        data-testid="email"
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      label="Password"
-                      name="password"
-                      hasFeedback={!!state.passwordError}
-                      validateStatus={
-                        state?.passwordError ? 'error' : 'validating'
-                      }
-                      help={state.passwordError}
-                    >
-                      <Input.Password data-testid="password" />
-                    </Form.Item>
-                    <Form.Item
-                      label="Password confirmation"
-                      name="passwordConfirmation"
-                      hasFeedback={!!state.passwordConfirmationError}
-                      validateStatus={
-                        state.passwordConfirmationError ? 'error' : 'validating'
-                      }
-                      help={state.passwordConfirmationError}
-                    >
-                      <Input.Password data-testid="passwordConfirmation" />
-                    </Form.Item>
-                    <Form.Item>
-                      <Space size="large">
-                        <Button
-                          type="primary"
-                          loading={state.isLoading}
-                          disabled={!!state.emailError || !!state.passwordError}
-                          htmlType="submit"
-                          data-testid="submit"
-                        >
-                          Sign up
-                        </Button>
-                        <Link>Forgot password?</Link>
-                      </Space>
-                    </Form.Item>
-                  </Form>
-                </TabPane>
-              </Tabs>
-            </Col>
-            <Col
-              span={16}
-              style={{ backgroundColor: '#0092ff', minHeight: '100vh' }}
-            />
-          </Row>
-        </Content>
-      </Layout>
-    </SignUpContext.Provider>
+                      <Form.Item
+                        label="Name"
+                        name="name"
+                        hasFeedback={!!state.nameError}
+                        validateStatus={
+                          state.nameError ? 'error' : 'validating'
+                        }
+                        help={state.nameError}
+                      >
+                        <Input placeholder="Full Name" data-testid="name" />
+                      </Form.Item>
+                      <Form.Item
+                        label="E-mail"
+                        name="email"
+                        hasFeedback={!!state.emailError}
+                        validateStatus={
+                          state.emailError ? 'error' : 'validating'
+                        }
+                        help={state.emailError}
+                      >
+                        <Input
+                          placeholder="you@email.com"
+                          type="email"
+                          data-testid="email"
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        label="Password"
+                        name="password"
+                        hasFeedback={!!state.passwordError}
+                        validateStatus={
+                          state?.passwordError ? 'error' : 'validating'
+                        }
+                        help={state.passwordError}
+                      >
+                        <Input.Password data-testid="password" />
+                      </Form.Item>
+                      <Form.Item
+                        label="Password confirmation"
+                        name="passwordConfirmation"
+                        hasFeedback={!!state.passwordConfirmationError}
+                        validateStatus={
+                          state.passwordConfirmationError
+                            ? 'error'
+                            : 'validating'
+                        }
+                        help={state.passwordConfirmationError}
+                      >
+                        <Input.Password data-testid="passwordConfirmation" />
+                      </Form.Item>
+                      <Form.Item>
+                        <Space size="large">
+                          <Button
+                            type="primary"
+                            loading={state.isLoading}
+                            disabled={
+                              !!state.emailError || !!state.passwordError
+                            }
+                            htmlType="submit"
+                            data-testid="submit"
+                          >
+                            Sign up
+                          </Button>
+                          <Link>Forgot password?</Link>
+                        </Space>
+                      </Form.Item>
+                    </Form>
+                  </TabPane>
+                </Tabs>
+              </Col>
+              <Col
+                span={16}
+                style={{ backgroundColor: '#0092ff', minHeight: '100vh' }}
+              />
+            </Row>
+          </Content>
+        </Layout>
+      </SignUpContext.Provider>
+    </>
   )
 }
 

@@ -2,12 +2,8 @@ import { createContext } from 'react'
 
 export type FormContextParams = {
   isLoading: boolean
+  success: boolean
   errorMessage?: string
-  successMessage?: string
 }
 
-export const FormContext = createContext<FormContextParams>({
-  isLoading: false,
-  errorMessage: '',
-  successMessage: ''
-})
+export const FormContext = createContext<FormContextParams>(null)
