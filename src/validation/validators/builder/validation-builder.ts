@@ -3,40 +3,46 @@ import {
   RequiredFieldValidation,
   MinLengthValidation,
   MaxLengthValidation,
-  EmailValidation
+  EmailValidation,
+  CompareFieldsValidation
 } from '../'
 
 export class ValidationBuilder {
-  private constructor (
+  private constructor(
     private readonly fieldName: string,
     private readonly validations: FieldValidation[]
   ) {}
 
-  static field (fieldName: string): ValidationBuilder {
+  static field(fieldName: string): ValidationBuilder {
     return new ValidationBuilder(fieldName, [])
   }
 
-  email (): ValidationBuilder {
+  email(): ValidationBuilder {
     this.validations.push(new EmailValidation(this.fieldName))
     return this
   }
 
-  max (length: number): ValidationBuilder {
+  max(length: number): ValidationBuilder {
     this.validations.push(new MaxLengthValidation(this.fieldName, length))
     return this
   }
 
-  min (length: number): ValidationBuilder {
+  min(length: number): ValidationBuilder {
     this.validations.push(new MinLengthValidation(this.fieldName, length))
     return this
   }
 
-  required (): ValidationBuilder {
+  required(): ValidationBuilder {
     this.validations.push(new RequiredFieldValidation(this.fieldName))
     return this
   }
 
-  build (): FieldValidation[] {
+  compare(value: any): ValidationBuilder {
+    this.validations.push(new CompareFieldsValidation(this.fieldName, value))
+    return this
+  }
+
+  build(): FieldValidation[] {
     return this.validations
   }
 }
