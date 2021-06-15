@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
 import { message } from 'antd'
-import { SigninContext, SigninContextParams } from '@/presentation/contexts'
+import { SignInContext, SignInContextParams } from '@/presentation/contexts'
 
-const SigninAlert: React.FC = () => {
-  const { formError } = useContext<SigninContextParams>(SigninContext)
+const SignInAlert: React.FC = () => {
+  const { formError } = useContext<SignInContextParams>(SignInContext)
 
   useEffect(() => {
     if (formError) {
@@ -14,4 +14,4 @@ const SigninAlert: React.FC = () => {
   return <></>
 }
 
-export default SigninAlert
+export default SignInAlert

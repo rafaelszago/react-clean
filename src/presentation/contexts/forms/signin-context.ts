@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-export type SigninContextParams = {
+export type SignInContextParams = {
   email: string
   password: string
   isLoading?: boolean
@@ -9,4 +9,4 @@ export type SigninContextParams = {
   formError?: string
 }
 
-export const SigninContext = createContext<SigninContextParams>(null)
+export const SignInContext = createContext<SignInContextParams>(null)

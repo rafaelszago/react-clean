@@ -11,10 +11,11 @@ import {
   Row,
   Col
 } from 'antd'
-import { SigninContextParams, SigninContext } from '@/presentation/contexts'
+import { SignInContextParams, SignInContext } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
 import { Authentication, SaveAccessToken } from '@/domain/usecases'
-import SigninAlert from './components/signin-alert'
+import SignInAlert from './components/signin-alert'
+import { useHistory } from 'react-router-dom'
 
 const { Link, Title } = Typography
 const { TabPane } = Tabs
@@ -26,12 +27,14 @@ type Props = {
   saveAccessToken: SaveAccessToken
 }
 
-const Signin: React.FC<Props> = ({
+const SignIn: React.FC<Props> = ({
   authentication,
   validation,
   saveAccessToken
 }: Props) => {
-  const [state, setState] = useState<SigninContextParams>({
+  const history = useHistory()
+
+  const [state, setState] = useState<SignInContextParams>({
     isLoading: false,
     email: '',
     password: ''
@@ -77,16 +80,20 @@ const Signin: React.FC<Props> = ({
     }
   }
 
+  const handleTabs = (activeKey: string): any => {
+    history.push(`/${activeKey}`)
+  }
+
   return (
-    <SigninContext.Provider value={state}>
+    <SignInContext.Provider value={state}>
       <Layout style={{ minHeight: '100vh' }}>
-        <SigninAlert />
+        <SignInAlert />
         <Content>
           <Row>
             <Col span={8} style={{ padding: '64px' }}>
               <Skeleton.Image style={{ marginBottom: '64px' }} />
               <Title>Welcome to Awesome Application</Title>
-              <Tabs>
+              <Tabs onChange={handleTabs} activeKey="signin">
                 <TabPane tab="Sign In" key="signin" id="signin">
                   <Form
                     name="signin"
@@ -144,8 +151,8 @@ const Signin: React.FC<Props> = ({
           </Row>
         </Content>
       </Layout>
-    </SigninContext.Provider>
+    </SignInContext.Provider>
   )
 }
 
-export default Signin
+export default SignIn
