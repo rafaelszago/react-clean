@@ -1,4 +1,4 @@
-import { SetStorage } from '@/data/protocols/cache'
+import { SetStorage } from '@/data/protocols/storage'
 import { SaveAccessToken } from '@/domain/usecases'
 
 export class LocalSaveAccessToken implements SaveAccessToken {

@@ -47,7 +47,7 @@ describe('Signin Component', () => {
     expect(passwordInput).toBeTruthy()
   })
 
-  test('Should disable submit button if has Validation errors', async () => {
+  test('Should disable submit button if has any Validation error', async () => {
     const { sut, validationStub } = makeSut()
     validationStub.errorMessage = faker.hacker.phrase()
     const emailInput = sut.getByTestId('email')

@@ -12,13 +12,13 @@ import {
   Col
 } from 'antd'
 import {
-  SignInContextParams,
-  SignInContext,
+  SignUpContextParams,
+  SignUpContext,
   FormContext,
   FormContextParams
 } from '@/presentation/contexts'
 import { Validation } from '@/presentation/protocols/validations'
-import { Authentication, SaveAccessToken } from '@/domain/usecases'
+import { AddAccount, SaveAccessToken } from '@/domain/usecases'
 import { FormAlert } from '@/presentation/components'
 import { useHistory } from 'react-router-dom'
 
@@ -27,21 +27,23 @@ const { TabPane } = Tabs
 const { Content } = Layout
 
 type Props = {
-  authentication?: Authentication
+  addAccount?: AddAccount
   validation: Validation
   saveAccessToken: SaveAccessToken
 }
 
-const SignIn: React.FC<Props> = ({
-  authentication,
+const SignUp: React.FC<Props> = ({
+  addAccount,
   validation,
   saveAccessToken
 }: Props) => {
   const history = useHistory()
 
-  const [state, setState] = useState<SignInContextParams>({
+  const [state, setState] = useState<SignUpContextParams>({
+    name: '',
     email: '',
-    password: ''
+    password: '',
+    passwordConfirmation: ''
   })
 
   const [formState, setFormState] = useState<FormContextParams>({
@@ -52,10 +54,16 @@ const SignIn: React.FC<Props> = ({
   useEffect(() => {
     setState({
       ...state,
+      nameError: validation.validate('name', state.name),
       emailError: validation.validate('email', state.email),
-      passwordError: validation.validate('password', state.password)
+      passwordError: validation.validate('password', state.password),
+      passwordConfirmationError: validation.validate(
+        'passwordConfirmation',
+        state.passwordConfirmation,
+        state.password
+      )
     })
-  }, [state.email, state.password])
+  }, [state.name, state.email, state.password, state.passwordConfirmation])
 
   const handleFormChange = (changedValues): any => {
     setState({
@@ -71,12 +79,15 @@ const SignIn: React.FC<Props> = ({
     try {
       setFormState({
         ...formState,
-        isLoading: true
+        isLoading: true,
+        errorMessage: ''
       })
 
-      const account = await authentication.auth({
+      const account = await addAccount.add({
+        name: state.name,
         email: state.email,
-        password: state.password
+        password: state.password,
+        passwordConfirmation: state.passwordConfirmation
       })
 
       if (account.accessToken) {
@@ -85,9 +96,10 @@ const SignIn: React.FC<Props> = ({
         setFormState({
           ...formState,
           isLoading: false,
-          success: true,
-          errorMessage: ''
+          success: true
         })
+
+        history.push('/app')
       }
     } catch (error) {
       setFormState({
@@ -102,26 +114,47 @@ const SignIn: React.FC<Props> = ({
     history.push(`/${activeKey}`)
   }
 
+  const hasFormError = (): boolean => {
+    return (
+      !!state.emailError ||
+      !!state.passwordError ||
+      !!state.nameError ||
+      !!state.passwordConfirmationError
+    )
+  }
+
   return (
     <>
       <FormContext.Provider value={formState}>
         <FormAlert />
       </FormContext.Provider>
-      <SignInContext.Provider value={state}>
+      <SignUpContext.Provider value={state}>
         <Layout style={{ minHeight: '100vh' }}>
           <Content>
             <Row>
               <Col span={8} style={{ padding: '64px' }}>
                 <Skeleton.Image style={{ marginBottom: '64px' }} />
                 <Title>Welcome to Awesome Application</Title>
-                <Tabs onChange={handleTabs} activeKey="signin">
-                  <TabPane tab="Sign In" key="signin" id="signin">
+                <Tabs onChange={handleTabs} activeKey="signup">
+                  <TabPane tab="Sign In" key="signin" id="signin"></TabPane>
+                  <TabPane tab="Create new account" key="signup" id="signup">
                     <Form
-                      name="signin"
+                      name="signup"
                       layout="vertical"
                       onValuesChange={handleFormChange}
                       onSubmitCapture={handleSubmit}
                     >
+                      <Form.Item
+                        label="Name"
+                        name="name"
+                        hasFeedback={!!state.nameError}
+                        validateStatus={
+                          state.nameError ? 'error' : 'validating'
+                        }
+                        help={state.nameError}
+                      >
+                        <Input placeholder="Full Name" data-testid="name" />
+                      </Form.Item>
                       <Form.Item
                         label="E-mail"
                         name="email"
@@ -142,31 +175,41 @@ const SignIn: React.FC<Props> = ({
                         name="password"
                         hasFeedback={!!state.passwordError}
                         validateStatus={
-                          state.passwordError ? 'error' : 'validating'
+                          state?.passwordError ? 'error' : 'validating'
                         }
                         help={state.passwordError}
                       >
                         <Input.Password data-testid="password" />
+                      </Form.Item>
+                      <Form.Item
+                        label="Password confirmation"
+                        name="passwordConfirmation"
+                        hasFeedback={!!state.passwordConfirmationError}
+                        validateStatus={
+                          state.passwordConfirmationError
+                            ? 'error'
+                            : 'validating'
+                        }
+                        help={state.passwordConfirmationError}
+                      >
+                        <Input.Password data-testid="password-confirmation" />
                       </Form.Item>
                       <Form.Item>
                         <Space size="large">
                           <Button
                             type="primary"
                             loading={formState.isLoading}
-                            disabled={
-                              !!state.emailError || !!state.passwordError
-                            }
+                            disabled={hasFormError()}
                             htmlType="submit"
                             data-testid="submit"
                           >
-                            Sign in
+                            Sign up
                           </Button>
                           <Link>Forgot password?</Link>
                         </Space>
                       </Form.Item>
                     </Form>
                   </TabPane>
-                  <TabPane tab="Create new account" key="signup"></TabPane>
                 </Tabs>
               </Col>
               <Col
@@ -176,9 +219,9 @@ const SignIn: React.FC<Props> = ({
             </Row>
           </Content>
         </Layout>
-      </SignInContext.Provider>
+      </SignUpContext.Provider>
     </>
   )
 }
 
-export default SignIn
+export default SignUp
