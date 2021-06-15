@@ -95,8 +95,11 @@ const SignUp: React.FC<Props> = ({
         setFormState({
           ...formState,
           isLoading: false,
-          success: true
+          success: true,
+          errorMessage: ''
         })
+
+        history.push('/app')
       }
     } catch (error) {
       setFormState({
@@ -109,6 +112,15 @@ const SignUp: React.FC<Props> = ({
 
   const handleTabs = (activeKey: string): any => {
     history.push(`/${activeKey}`)
+  }
+
+  const hasFormError = (): boolean => {
+    return (
+      !!state.emailError ||
+      !!state.passwordError ||
+      !!state.nameError ||
+      !!state.passwordConfirmationError
+    )
   }
 
   return (
@@ -186,10 +198,8 @@ const SignUp: React.FC<Props> = ({
                         <Space size="large">
                           <Button
                             type="primary"
-                            loading={state.isLoading}
-                            disabled={
-                              !!state.emailError || !!state.passwordError
-                            }
+                            loading={formState.isLoading}
+                            disabled={hasFormError()}
                             htmlType="submit"
                             data-testid="submit"
                           >

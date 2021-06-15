@@ -85,7 +85,8 @@ const SignIn: React.FC<Props> = ({
         setFormState({
           ...formState,
           isLoading: false,
-          success: true
+          success: true,
+          errorMessage: ''
         })
       }
     } catch (error) {
