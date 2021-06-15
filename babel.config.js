@@ -1,10 +1,10 @@
 module.exports = {
-  presets: ["next/babel"],
+  presets: ['next/babel'],
   plugins: [
     'import',
     {
-        'libraryName': 'antd',
-        'style': 'css'
+      libraryName: 'antd',
+      style: 'css'
     }
   ]
-};
+}
