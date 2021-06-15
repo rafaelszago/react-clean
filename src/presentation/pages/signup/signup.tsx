@@ -49,7 +49,8 @@ const SignUp: React.FC<Props> = ({
       passwordError: validation.validate('password', state.password),
       passwordConfirmationError: validation.validate(
         'passwordConfirmation',
-        state.passwordConfirmation
+        state.passwordConfirmation,
+        state.password
       )
     })
   }, [state.name, state.email, state.password, state.passwordConfirmation])
@@ -143,11 +144,11 @@ const SignUp: React.FC<Props> = ({
                     <Form.Item
                       label="Password confirmation"
                       name="passwordConfirmation"
-                      hasFeedback={!!state.passwordError}
+                      hasFeedback={!!state.passwordConfirmationError}
                       validateStatus={
-                        state.passwordError ? 'error' : 'validating'
+                        state.passwordConfirmationError ? 'error' : 'validating'
                       }
-                      help={state.passwordError}
+                      help={state.passwordConfirmationError}
                     >
                       <Input.Password data-testid="passwordConfirmation" />
                     </Form.Item>
