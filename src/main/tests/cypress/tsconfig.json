@@ -2,7 +2,9 @@
   "extends": "../../../../tsconfig.json",
   "compilerOptions": {
     "types": ["cypress"],
-    "esModuleInterop": true
+    "noEmit": false,
+    "isolatedModules": false
   },
-  "include": ["../../../../node_modules/cypress", "./*/*.ts"]
+  "include": ["../../../../node_modules/cypress", "./*/*.ts"],
+  "exclude": ["../node_modules/cypress/**/*.js"]
 }

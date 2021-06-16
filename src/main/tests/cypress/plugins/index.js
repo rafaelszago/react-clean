@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 const cypressTypeScriptPreprocessor = require('./cy-ts-preprocessor')
 
 module.exports = on => {
