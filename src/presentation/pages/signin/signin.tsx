@@ -130,6 +130,7 @@ const SignIn: React.FC<Props> = ({
                           state.emailError ? 'error' : 'validating'
                         }
                         help={state.emailError}
+                        data-testid="email-item"
                       >
                         <Input
                           placeholder="you@email.com"
@@ -145,6 +146,7 @@ const SignIn: React.FC<Props> = ({
                           state.passwordError ? 'error' : 'validating'
                         }
                         help={state.passwordError}
+                        data-testid="password-item"
                       >
                         <Input.Password data-testid="password" />
                       </Form.Item>
