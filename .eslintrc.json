@@ -4,11 +4,16 @@
       "version": "detect"
     }
   },
-  "extends": ["standard-with-typescript", "plugin:react/recommended"],
+  "extends": [
+    "standard-with-typescript",
+    "plugin:react/recommended",
+    "plugin:cypress/recommended"
+  ],
   "env": {
-    "jest": true
+    "jest": true,
+    "cypress/globals": true
   },
-  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "plugins": ["react", "@typescript-eslint", "prettier", "cypress"],
   "parserOptions": {
     "project": "./tsconfig-eslint.json"
   },
@@ -24,6 +29,11 @@
     "no-redeclare": "off",
     "import/export": "off",
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "error",
+    "cypress/assertion-before-screenshot": "warn",
+    "cypress/no-force": "warn",
+    "cypress/no-async-tests": "error"
   }
 }
