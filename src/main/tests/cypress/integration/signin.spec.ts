@@ -34,7 +34,7 @@ describe('SignIn', () => {
   })
 
   it('Should has no accessToken if credentials are invalid', () => {
-    mockInvalidCredentialsError('api/signin')
+    mockInvalidCredentialsError({ url: 'api/signin' })
     cy.get('[data-testid="email"]').type(faker.internet.email())
     cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
     cy.get('[data-testid="submit"]').click()
@@ -44,7 +44,7 @@ describe('SignIn', () => {
   })
 
   it('Should save accessToken if request returns status 200', () => {
-    mockSuccess('api/signin')
+    mockSuccess({ url: 'api/signin' })
     cy.get('[data-testid="email"]').type(faker.internet.email())
     cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
     cy.get('[data-testid="submit"]').click()
