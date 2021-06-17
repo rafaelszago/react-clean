@@ -31,4 +31,33 @@ describe('SignIn', () => {
     cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
     cy.get('[data-testid="submit"]').should('not.have.attr', 'disabled')
   })
+
+  it('Should has no accessToken if credentials are invalid', () => {
+    cy.intercept('POST', '/api/signin', {
+      statusCode: 403
+    }).as('apiRequest')
+    cy.get('[data-testid="email"]').type(faker.internet.email())
+    cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
+    cy.get('[data-testid="submit"]').click()
+    cy.wait('@apiRequest')
+      .window()
+      .then(window => assert.isNull(window.localStorage.getItem('accessToken')))
+  })
+
+  it('Should save accessToken if request returns status 200', () => {
+    cy.intercept('POST', '/api/signin', {
+      statusCode: 200,
+      body: {
+        accessToken: faker.random.alpha({ count: 102 })
+      }
+    }).as('apiRequest')
+    cy.get('[data-testid="email"]').type(faker.internet.email())
+    cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
+    cy.get('[data-testid="submit"]').click()
+    cy.wait('@apiRequest')
+      .window()
+      .then(window =>
+        assert.isNotNull(window.localStorage.getItem('accessToken'))
+      )
+  })
 })

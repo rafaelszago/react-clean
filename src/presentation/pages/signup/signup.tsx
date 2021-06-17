@@ -125,10 +125,10 @@ const SignUp: React.FC<Props> = ({
 
   return (
     <>
-      <FormContext.Provider value={formState}>
-        <FormAlert />
-      </FormContext.Provider>
       <SignUpContext.Provider value={state}>
+        <FormContext.Provider value={formState}>
+          <FormAlert />
+        </FormContext.Provider>
         <Layout style={{ minHeight: '100vh' }}>
           <Content>
             <Row>
