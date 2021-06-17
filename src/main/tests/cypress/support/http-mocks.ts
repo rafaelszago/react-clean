@@ -1,4 +1,5 @@
 import faker from 'faker'
+import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
 type HttpMockParams = {
   url: string
@@ -12,7 +13,7 @@ export const mockInvalidCredentialsError = ({
   cy.intercept('POST', url, {
     statusCode: 401,
     body: {
-      error: faker.random.words()
+      error: new InvalidCredentialsError().message
     }
   }).as(mockName)
 }
@@ -24,7 +25,7 @@ export const mockUnexpectedError = ({
   cy.intercept('POST', url, {
     statusCode: faker.helpers.randomize([400, 404, 500]),
     body: {
-      error: faker.random.words()
+      error: new UnexpectedError().message
     }
   }).as(mockName)
 }

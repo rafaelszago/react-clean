@@ -152,6 +152,7 @@ const SignUp: React.FC<Props> = ({
                           state.nameError ? 'error' : 'validating'
                         }
                         help={state.nameError}
+                        data-testid="name-item"
                       >
                         <Input placeholder="Full Name" data-testid="name" />
                       </Form.Item>
@@ -163,6 +164,7 @@ const SignUp: React.FC<Props> = ({
                           state.emailError ? 'error' : 'validating'
                         }
                         help={state.emailError}
+                        data-testid="email-item"
                       >
                         <Input
                           placeholder="you@email.com"
@@ -178,6 +180,7 @@ const SignUp: React.FC<Props> = ({
                           state?.passwordError ? 'error' : 'validating'
                         }
                         help={state.passwordError}
+                        data-testid="password-item"
                       >
                         <Input.Password data-testid="password" />
                       </Form.Item>
@@ -191,6 +194,7 @@ const SignUp: React.FC<Props> = ({
                             : 'validating'
                         }
                         help={state.passwordConfirmationError}
+                        data-testid="password-confirmation-item"
                       >
                         <Input.Password data-testid="password-confirmation" />
                       </Form.Item>
