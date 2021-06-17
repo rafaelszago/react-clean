@@ -2,7 +2,7 @@
   "projectId": "a4qky5",
   "baseUrl": "http://localhost:8080",
   "fixturesFolder": false,
-  "supportFile": false,
+  "supportFile": "src/main/tests/cypress/support/index.js",
   "pluginFile": "src/main/tests/cypress/plugins/index.js",
   "integrationFolder": "src/main/tests/cypress/integration"
 }
