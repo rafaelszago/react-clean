@@ -1,4 +1,5 @@
 import faker from 'faker'
+import { mockInvalidCredentialsError, mockSuccess } from '../support/http-mocks'
 
 describe('SignIn', () => {
   beforeEach(() => {
@@ -33,9 +34,7 @@ describe('SignIn', () => {
   })
 
   it('Should has no accessToken if credentials are invalid', () => {
-    cy.intercept('POST', '/api/signin', {
-      statusCode: 403
-    }).as('apiRequest')
+    mockInvalidCredentialsError({ url: 'api/signin' })
     cy.get('[data-testid="email"]').type(faker.internet.email())
     cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
     cy.get('[data-testid="submit"]').click()
@@ -45,12 +44,7 @@ describe('SignIn', () => {
   })
 
   it('Should save accessToken if request returns status 200', () => {
-    cy.intercept('POST', '/api/signin', {
-      statusCode: 200,
-      body: {
-        accessToken: faker.random.alpha({ count: 102 })
-      }
-    }).as('apiRequest')
+    mockSuccess({ url: 'api/signin' })
     cy.get('[data-testid="email"]').type(faker.internet.email())
     cy.get('[data-testid="password"]').type(faker.random.alpha({ count: 6 }))
     cy.get('[data-testid="submit"]').click()
