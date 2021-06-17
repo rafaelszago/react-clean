@@ -1,10 +1,11 @@
 import faker from 'faker'
-import { mockInvalidCredentialsError, mockSuccess } from '../support/http-mocks'
+import { mockSuccess, mockUnexpectedError } from '../support/http-mocks'
 import {
   CompareFieldsError,
   EmailError,
   MinLengthError
 } from '@/validation/errors'
+import { UnexpectedError } from '@/domain/errors'
 
 describe('SignUp', () => {
   beforeEach(() => {
@@ -42,5 +43,38 @@ describe('SignUp', () => {
       'contain.text',
       new CompareFieldsError().message
     )
+  })
+
+  it('Should enable submit button if form is valid', () => {
+    const password = faker.random.alpha({ count: 6 })
+    cy.getByTestId('name').type(faker.random.alpha({ count: 6 }))
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('password').type(password)
+    cy.getByTestId('password-confirmation').type(password)
+    cy.getByTestId('submit').should('not.have.attr', 'disabled')
+  })
+
+  it('Should return UnexpectedErrror if request fails', () => {
+    mockUnexpectedError({ url: 'api/signup' })
+    const password = faker.random.alpha({ count: 6 })
+    cy.getByTestId('name').type(faker.random.alpha({ count: 6 }))
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('password').type(password)
+    cy.getByTestId('password-confirmation').type(password)
+    cy.getByTestId('submit').click()
+    cy.wait('@apiRequest')
+      .its('response.body.error')
+      .should('eq', new UnexpectedError().message)
+  })
+
+  it('Should return accessToken if request succeeds', () => {
+    mockSuccess({ url: 'api/signup' })
+    const password = faker.random.alpha({ count: 6 })
+    cy.getByTestId('name').type(faker.random.alpha({ count: 6 }))
+    cy.getByTestId('email').type(faker.internet.email())
+    cy.getByTestId('password').type(password)
+    cy.getByTestId('password-confirmation').type(password)
+    cy.getByTestId('submit').click()
+    cy.wait('@apiRequest').its('response.body.accessToken').should('exist')
   })
 })
